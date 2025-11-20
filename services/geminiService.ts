@@ -1,9 +1,18 @@
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
 export const generateAIResponse = async (userMessage: string): Promise<string> => {
   try {
+    // Initialize the client lazily to prevent "Black Screen" crash on app load
+    // if the environment variable isn't immediately available in the browser context.
+    const apiKey = process.env.API_KEY;
+    
+    if (!apiKey) {
+      console.error("API_KEY is missing.");
+      return "O sistema de chat está temporariamente indisponível (Chave de API não configurada).";
+    }
+
+    const ai = new GoogleGenAI({ apiKey: apiKey });
+
     const systemInstruction = `
       Você é o assistente virtual da BF Agência, uma agência de marketing digital especializada em tráfego pago.
       
