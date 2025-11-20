@@ -131,10 +131,11 @@ export default function RadialOrbitalTimeline() {
   };
 
   useEffect(() => {
-    let rotationTimer: ReturnType<typeof setInterval>;
+    let rotationTimer: number | undefined;
 
     if (autoRotate && viewMode === "orbital") {
-      rotationTimer = setInterval(() => {
+      // Explicitly use window.setInterval to ensure we get a number ID back, not a NodeJS.Timeout
+      rotationTimer = window.setInterval(() => {
         setRotationAngle((prev) => {
           const newAngle = (prev + 0.2) % 360;
           return Number(newAngle.toFixed(3));
@@ -143,8 +144,8 @@ export default function RadialOrbitalTimeline() {
     }
 
     return () => {
-      if (rotationTimer) {
-        clearInterval(rotationTimer);
+      if (rotationTimer !== undefined) {
+        window.clearInterval(rotationTimer);
       }
     };
   }, [autoRotate, viewMode]);

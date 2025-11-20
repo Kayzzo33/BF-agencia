@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Menu, X, MessageCircle, ArrowRight, Check, Instagram, Facebook, Linkedin, Mail, Phone, Target, TrendingUp, Users, ShieldCheck, Cpu, Sparkles, MapPin, ScanEye } from 'lucide-react';
+import { Menu, X, MessageCircle, ArrowRight, Check, Instagram, Facebook, Linkedin, Mail, Phone, Target, TrendingUp, Users, ShieldCheck, Cpu, Sparkles, MapPin, ScanEye, CheckCircle2 } from 'lucide-react';
 import { cn } from './utils';
 import { Modal } from './components/Modal';
 import { Reveal } from './components/Reveal';
@@ -77,7 +77,41 @@ const ADAPTATION_ITEMS = [
   { title: "Direcionamento estratégico de público", icon: <Users size={28} /> }
 ];
 
-// --- Components within App to simplify file structure while maintaining separation ---
+// --- Helper Components ---
+
+const Counter = ({ end, duration = 2000 }: { end: number, duration?: number }) => {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+  const [hasAnimated, setHasAnimated] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !hasAnimated) {
+        setHasAnimated(true);
+        let start = 0;
+        // Frame time 16ms (approx 60fps)
+        const totalFrames = duration / 16;
+        const increment = end / totalFrames;
+        
+        const timer = window.setInterval(() => {
+          start += increment;
+          if (start >= end) {
+            setCount(end);
+            window.clearInterval(timer);
+          } else {
+            setCount(Math.floor(start));
+          }
+        }, 16);
+      }
+    });
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [end, duration, hasAnimated]);
+
+  return <span ref={ref}>{count}</span>;
+};
+
+// --- Main Layout Components ---
 
 const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -476,7 +510,7 @@ const SolutionsSection = () => {
     <section className="relative bg-black pt-24 pb-48 overflow-visible z-30">
       <div className="container mx-auto px-4 relative z-10">
         
-        {/* Part 1: Solutions (White Card) */}
+        {/* Part 1: Solutions (Premium Grid) */}
         <Reveal>
           <div className="text-center mb-12">
             <h2 className="text-2xl md:text-4xl font-heading font-bold leading-tight">
@@ -487,25 +521,27 @@ const SolutionsSection = () => {
           </div>
         </Reveal>
 
-        <Reveal delay={200}>
-          <div className="bg-white rounded-[2.5rem] p-8 md:p-12 max-w-3xl mx-auto shadow-2xl relative z-20 mb-16">
-            <div className="grid grid-cols-1 gap-6">
+        <div className="max-w-6xl mx-auto mb-24">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {SOLUTIONS_LIST.map((item, idx) => (
-                <div key={idx} className="flex items-center gap-4">
-                  <div className="min-w-[24px] text-brand-yellow">
-                    <MapPin className="fill-brand-yellow text-brand-yellow" size={24} />
+                <Reveal key={idx} delay={idx * 50}>
+                  <div className="group bg-zinc-50 border border-zinc-200 rounded-xl p-6 flex items-start gap-4 hover:border-brand-yellow hover:shadow-[0_10px_30px_rgba(255,193,7,0.15)] transition-all duration-300 hover:-translate-y-1 cursor-default h-full">
+                    <div className="mt-1 min-w-[24px]">
+                      <div className="w-6 h-6 rounded-full bg-black flex items-center justify-center text-brand-yellow group-hover:bg-brand-yellow group-hover:text-black transition-colors">
+                        <CheckCircle2 size={14} />
+                      </div>
+                    </div>
+                    <p className="text-zinc-800 font-bold text-lg leading-snug group-hover:text-black transition-colors">{item}</p>
                   </div>
-                  <p className="text-black font-bold text-lg md:text-xl tracking-wide">{item}</p>
-                </div>
+                </Reveal>
               ))}
             </div>
-          </div>
-        </Reveal>
+        </div>
 
         {/* Part 2: Adaptation (Sharp Notebook) */}
         <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-center gap-8 relative z-20 mt-32">
-           {/* Text Content - Centered */}
-           <div className="w-full lg:w-5/12 pl-0 md:pl-8 lg:pl-12">
+           {/* Text Content - Centered/Right Pushed */}
+           <div className="w-full lg:w-1/2 lg:pl-24 z-20 relative">
               <Reveal>
                 <h2 className="text-4xl md:text-5xl font-heading font-bold text-white mb-12">
                   Adaptação diante <br/><span className="text-white">a concorrência:</span>
@@ -534,10 +570,10 @@ const SolutionsSection = () => {
               </Reveal>
            </div>
            
-           {/* Sharp Notebook - Right - Hidden on responsive, visible on desktop */}
-           <div className="w-full lg:w-7/12 hidden lg:flex justify-center lg:justify-end">
+           {/* Sharp Notebook - Pulled Left to Overlap */}
+           <div className="w-full lg:w-1/2 hidden lg:flex justify-start lg:-ml-32 relative z-10">
               <Reveal delay={200}>
-                 <img src={ASSETS.notebookBlack} alt="Dashboard" className="w-full max-w-lg h-auto object-contain drop-shadow-2xl" />
+                 <img src={ASSETS.notebookBlack} alt="Dashboard" className="w-full max-w-md h-auto object-contain drop-shadow-2xl" />
               </Reveal>
            </div>
         </div>
@@ -553,7 +589,6 @@ const SolutionsSection = () => {
 };
 
 const Stats = () => {
-  // Simplified counter logic for brevity
   return (
     <section className="py-20 bg-zinc-900 border-y border-zinc-800">
       <div className="container mx-auto px-4">
@@ -562,7 +597,8 @@ const Stats = () => {
             <Reveal key={idx} delay={idx * 100}>
               <div className="flex flex-col items-center">
                 <div className="text-4xl md:text-6xl font-black text-brand-yellow mb-2 flex items-baseline">
-                  {stat.value}<span className="text-2xl md:text-4xl">{stat.suffix}</span>
+                  <Counter end={stat.value} />
+                  <span className="text-2xl md:text-4xl">{stat.suffix}</span>
                 </div>
                 <div className="text-gray-400 uppercase text-xs md:text-sm tracking-widest font-bold">
                   {stat.label}
