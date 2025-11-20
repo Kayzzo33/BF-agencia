@@ -1,16 +1,41 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, X, MessageCircle, ArrowRight, Check, Instagram, Facebook, Linkedin, Mail, Phone, Target, TrendingUp, Users, ShieldCheck, Cpu } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Menu, X, MessageCircle, ArrowRight, Check, Instagram, Facebook, Linkedin, Mail, Phone, Target, TrendingUp, Users, ShieldCheck, Cpu, Sparkles, MapPin, ScanEye } from 'lucide-react';
 import { cn } from './utils';
 import { Modal } from './components/Modal';
 import { Reveal } from './components/Reveal';
 import { AIChat } from './components/AIChat';
+import RadialOrbitalTimeline from './components/RadialOrbitalTimeline';
 
 // Assets configuration
 const ASSETS = {
-  heroBg: "https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=2574&auto=format&fit=crop",
-  team1: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2574&auto=format&fit=crop", // Placeholder for team member
-  team2: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=2574&auto=format&fit=crop", // Placeholder for team member
-  dashboard: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2670&auto=format&fit=crop",
+  heroBg: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763568231/BackGround_Hero_boqfkf.jpg", 
+  // New Logos
+  logoMain: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763570166/logo_hero_qw4x5l.png",
+  logoText: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763570163/agencia_logo_hero_dr6zrq.png",
+  heroLogo: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763569572/Logo_Preta_p7evqr.png",
+  logoWatermark: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763569572/logo_branco_z9jsgg.png",
+  
+  // Intro Section Assets
+  introBg: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763573021/fundo_section2_rys2qf.jpg",
+  notebook: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763573334/notebook_cffgac.png",
+  arrow: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763573324/SETAS_o6qbsb.png",
+  logoYellow: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763569572/logo_amarela_gb7rgq.png",
+
+  // Team Section Assets
+  teamBg: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763576420/Fundobsluan_tagksa.jpg",
+  teamPerson1: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763575835/BFCOMSOMBRA_lnyxdd.png", // Geriel
+  teamPerson2: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763575823/LuanComSombra_zs8shq.png", // Marcos
+  teamFrame: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763576406/QuadradoLinha_rtqqjk.png",
+  teamLogo: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763569572/Logo_Preta_p7evqr.png",
+
+  // Solutions Assets
+  notebookBlack: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763581102/notebookblack_or44lx.png",
+  notebookBlur: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763581375/notebookblackdesfocado_ndrxwe.png",
+  
+  // Partnership Section
+  partnerPerson: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763569573/bf_cinza_v5jmst.png",
+
+  team2: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=2574&auto=format&fit=crop", 
 };
 
 // Data
@@ -36,6 +61,22 @@ const TESTIMONIALS = [
   { name: "Fernanda Lima", role: "Advogada", text: "Conseguiram segmentar meu público perfeitamente." },
 ];
 
+const SOLUTIONS_LIST = [
+  "Criação de campanhas estratégicas",
+  "Gerenciamento de métricas",
+  "Foco em resultados exponenciais",
+  "Planejamento de escala",
+  "Análise de criativos",
+  "Análise de Copy",
+  "Relatório Mensal com dados precisos"
+];
+
+const ADAPTATION_ITEMS = [
+  { title: "Observação de mercado", icon: <ScanEye size={28} /> },
+  { title: "Análise completa do nicho", icon: <Target size={28} /> },
+  { title: "Direcionamento estratégico de público", icon: <Users size={28} /> }
+];
+
 // --- Components within App to simplify file structure while maintaining separation ---
 
 const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
@@ -49,54 +90,98 @@ const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
   }, []);
 
   return (
-    <nav className={cn(
-      "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-white/5",
-      isScrolled ? "bg-black/90 backdrop-blur-md py-3 shadow-lg" : "bg-transparent py-6"
-    )}>
-      <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
-        <div className="flex items-center gap-2 group cursor-pointer">
-          <div className="w-10 h-10 bg-brand-yellow rounded flex items-center justify-center text-black font-black text-xl group-hover:scale-110 transition-transform">
-            BF
-          </div>
-          <span className={cn(
-            "font-heading font-bold text-white text-lg tracking-wide transition-all duration-500",
-            isScrolled ? "opacity-0 w-0 overflow-hidden" : "opacity-100 w-auto"
+    <div className="fixed top-0 left-0 right-0 z-50 flex justify-center transition-all duration-300 pointer-events-none">
+      <nav 
+        className={cn(
+          "pointer-events-auto transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] flex items-center justify-between",
+          isScrolled 
+            ? "mt-6 w-[92%] md:w-fit bg-black/70 backdrop-blur-xl border border-white/10 rounded-full px-4 py-3 shadow-[0_0_30px_rgba(0,0,0,0.5)] md:gap-12" 
+            : "w-full max-w-7xl px-6 py-8 bg-transparent md:gap-0"
+        )}
+      >
+        <div className="flex items-center gap-3">
+          {/* Main Logo Symbol */}
+          <img 
+            src={ASSETS.logoMain} 
+            alt="BF Logo" 
+            className="h-8 w-auto object-contain transition-transform hover:scale-110" 
+          />
+          
+          {/* Text Logo - Collapses on scroll */}
+          <div className={cn(
+            "overflow-hidden transition-all duration-500 ease-in-out flex items-center",
+            isScrolled ? "w-0 opacity-0" : "w-24 sm:w-32 opacity-100"
           )}>
-            AGÊNCIA
-          </span>
+            <img 
+              src={ASSETS.logoText} 
+              alt="Agência" 
+              className="h-6 sm:h-8 w-auto object-contain ml-2" 
+            />
+          </div>
         </div>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-8">
-          <a href="#home" className="text-gray-300 hover:text-brand-yellow transition-colors text-sm uppercase tracking-wider font-medium">Início</a>
-          <a href="#about" className="text-gray-300 hover:text-brand-yellow transition-colors text-sm uppercase tracking-wider font-medium">Quem Somos</a>
-          <a href="#services" className="text-gray-300 hover:text-brand-yellow transition-colors text-sm uppercase tracking-wider font-medium">Serviços</a>
+          <a 
+            href="#home" 
+            className={cn(
+              "transition-colors text-sm uppercase tracking-wider font-bold",
+              // If scrolled, light gray (on black). If not scrolled, BLACK (on yellow hero).
+              isScrolled ? "text-gray-300 hover:text-brand-yellow" : "text-black hover:text-zinc-700"
+            )}
+          >
+            Início
+          </a>
+          <a 
+            href="#about" 
+            className={cn(
+              "transition-colors text-sm uppercase tracking-wider font-bold",
+              isScrolled ? "text-gray-300 hover:text-brand-yellow" : "text-black hover:text-zinc-700"
+            )}
+          >
+            Quem Somos
+          </a>
+          <a 
+            href="#services" 
+            className={cn(
+              "transition-colors text-sm uppercase tracking-wider font-bold",
+              isScrolled ? "text-gray-300 hover:text-brand-yellow" : "text-black hover:text-zinc-700"
+            )}
+          >
+            Serviços
+          </a>
+        </div>
+
+        <div className="flex items-center gap-4">
           <button 
             onClick={onOpenModal}
-            className="bg-brand-yellow hover:bg-yellow-400 text-black font-bold px-6 py-2 rounded-full transition-all hover:shadow-[0_0_15px_rgba(255,193,7,0.4)] hover:-translate-y-0.5"
+            className={cn(
+              "bg-brand-yellow hover:bg-yellow-400 text-black font-bold rounded-full transition-all hover:shadow-[0_0_15px_rgba(255,193,7,0.4)] hover:-translate-y-0.5 whitespace-nowrap",
+              isScrolled ? "px-5 py-2 text-sm" : "px-6 py-2 shadow-xl"
+            )}
           >
             Falar com Especialista
           </button>
+
+          {/* Mobile Toggle */}
+          <button 
+            className={cn("md:hidden transition-colors", isScrolled ? "text-white" : "text-black")} 
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X /> : <Menu />}
+          </button>
         </div>
 
-        {/* Mobile Toggle */}
-        <button className="md:hidden text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-          {isMenuOpen ? <X /> : <Menu />}
-        </button>
-
-        {/* Mobile Menu */}
+        {/* Mobile Menu Dropdown */}
         {isMenuOpen && (
-          <div className="absolute top-full left-0 right-0 bg-zinc-900 border-b border-zinc-800 p-4 flex flex-col gap-4 md:hidden animate-[fadeIn_0.2s]">
-            <a href="#home" className="text-white p-2" onClick={() => setIsMenuOpen(false)}>Início</a>
-            <a href="#about" className="text-white p-2" onClick={() => setIsMenuOpen(false)}>Quem Somos</a>
-            <a href="#services" className="text-white p-2" onClick={() => setIsMenuOpen(false)}>Serviços</a>
-            <button onClick={() => { onOpenModal(); setIsMenuOpen(false); }} className="bg-brand-yellow text-black font-bold p-3 rounded text-center">
-              Falar com Especialista
-            </button>
+          <div className="absolute top-full mt-4 left-0 right-0 bg-zinc-900/95 backdrop-blur-lg border border-white/10 rounded-2xl p-4 flex flex-col gap-4 md:hidden animate-[fadeIn_0.2s] shadow-2xl mx-4">
+            <a href="#home" className="text-white p-2 text-center font-medium hover:text-brand-yellow" onClick={() => setIsMenuOpen(false)}>Início</a>
+            <a href="#about" className="text-white p-2 text-center font-medium hover:text-brand-yellow" onClick={() => setIsMenuOpen(false)}>Quem Somos</a>
+            <a href="#services" className="text-white p-2 text-center font-medium hover:text-brand-yellow" onClick={() => setIsMenuOpen(false)}>Serviços</a>
           </div>
         )}
-      </div>
-    </nav>
+      </nav>
+    </div>
   );
 };
 
@@ -105,33 +190,28 @@ const Hero = ({ onOpenModal }: { onOpenModal: () => void }) => {
     <section id="home" className="relative min-h-screen flex items-center pt-20 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-black/80 to-brand-dark z-10"></div>
-        <img src={ASSETS.heroBg} alt="Background" className="w-full h-full object-cover opacity-30" />
+        {/* Adjusted overlay to let the yellow background shine through for the black logo, but darken at bottom for flow */}
+        <div className="absolute inset-0 bg-gradient-to-b from-brand-yellow/10 via-transparent to-black/90 z-10"></div>
+        <img src={ASSETS.heroBg} alt="Background" className="w-full h-full object-cover opacity-100" />
       </div>
 
       <div className="container mx-auto px-4 relative z-20 flex flex-col items-center text-center">
+        
         <Reveal>
-          <div className="inline-block px-4 py-1 mb-6 border border-brand-yellow/30 rounded-full bg-brand-yellow/10 backdrop-blur-sm">
-            <span className="text-brand-yellow text-xs md:text-sm font-bold tracking-widest uppercase">Agência Especializada</span>
-          </div>
+          <img 
+            src={ASSETS.heroLogo} 
+            alt="BF Agência" 
+            className="w-64 md:w-80 lg:w-96 mx-auto mb-8 drop-shadow-2xl"
+          />
         </Reveal>
         
         <Reveal delay={200}>
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading font-black text-white leading-tight mb-6 max-w-5xl">
-            GESTÃO DIGITAL DE <br/>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-yellow to-yellow-200">TRÁFEGO PAGO</span> <br/>
-            INTELIGENTE
-          </h1>
+          <h2 className="text-black md:text-zinc-900 text-xl md:text-3xl font-heading font-bold mb-12 max-w-3xl mx-auto drop-shadow-md">
+            As melhores soluções em tráfego pago para o seu negócio
+          </h2>
         </Reveal>
 
         <Reveal delay={400}>
-          <p className="text-gray-400 text-lg md:text-xl max-w-2xl mb-10 leading-relaxed">
-            Escale suas vendas e domine seu nicho com estratégias validadas de anúncios online. 
-            Nós cuidamos da tecnologia, você cuida do crescimento.
-          </p>
-        </Reveal>
-
-        <Reveal delay={600}>
           <div className="flex flex-col sm:flex-row gap-4">
             <a 
               href="https://wa.me/5573983069002?text=Olá! Gostaria de conhecer os serviços da BF Agência para gestão de tráfego pago."
@@ -144,7 +224,7 @@ const Hero = ({ onOpenModal }: { onOpenModal: () => void }) => {
             </a>
             <button 
               onClick={onOpenModal}
-              className="border border-white/20 text-white text-lg font-bold px-8 py-4 rounded-lg hover:bg-white/10 transition-all flex items-center justify-center"
+              className="border border-white/20 text-white text-lg font-bold px-8 py-4 rounded-lg hover:bg-white/10 transition-all flex items-center justify-center bg-black/30 backdrop-blur-sm"
             >
               Solicitar Análise
             </button>
@@ -160,47 +240,91 @@ const Hero = ({ onOpenModal }: { onOpenModal: () => void }) => {
   );
 };
 
+const IntroSection = () => {
+  return (
+    <section className="relative w-full min-h-[700px] flex items-center overflow-hidden bg-black">
+      {/* Background */}
+      <div className="absolute inset-0 z-0">
+        <img src={ASSETS.introBg} alt="Intro Background" className="w-full h-full object-cover" />
+        {/* Gradient overlay to ensure text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-transparent z-10"></div>
+      </div>
+
+      {/* Logo Top Right */}
+      <div className="absolute top-8 right-8 z-30">
+        <img src={ASSETS.logoYellow} alt="BF Logo" className="w-24 md:w-32 opacity-90 hover:opacity-100 transition-opacity" />
+      </div>
+
+      <div className="container mx-auto px-4 relative z-20 h-full flex flex-col md:flex-row items-center">
+        {/* Left: Text Content */}
+        <div className="w-full md:w-1/2 pt-20 md:pt-0 pl-4 md:pl-12">
+          <Reveal>
+            <h2 className="font-heading font-black text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] uppercase tracking-tight">
+              <span className="text-white block">Gestão</span>
+              <span className="text-white block">Digital de</span>
+              <span className="text-brand-yellow block mt-2">Tráfego Pago</span>
+              <span className="text-brand-yellow block">Inteligente</span>
+            </h2>
+          </Reveal>
+        </div>
+
+        {/* Right: Visuals */}
+        <div className="w-full md:w-1/2 relative h-[500px] md:h-[700px] flex items-end justify-center md:justify-end pb-10">
+          {/* Arrow Rising from bottom */}
+          <img 
+            src={ASSETS.arrow} 
+            alt="Arrow" 
+            className="absolute bottom-0 right-0 w-[90%] md:w-[80%] object-contain z-10 animate-[slideUp_1s_ease-out]"
+            style={{ maxHeight: '90%' }}
+          />
+          {/* Notebook Floating */}
+          <div className="relative z-20 w-[85%] md:w-[75%] md:-mr-10 mb-10 md:mb-20 animate-[pulse-slow_4s_infinite]">
+            <img 
+              src={ASSETS.notebook} 
+              alt="Dashboard" 
+              className="w-full h-auto object-contain drop-shadow-2xl transform -rotate-2 hover:rotate-0 transition-transform duration-700"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const About = () => (
-  <section id="about" className="py-24 bg-brand-dark relative overflow-hidden">
-    <div className="container mx-auto px-4">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+  <section id="about" className="py-24 bg-white relative overflow-hidden">
+    <div className="container mx-auto px-4 relative">
+      {/* Duplicated partial logo on the Left (Cutoff) */}
+      <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[40%] w-[300px] md:w-[500px] pointer-events-none opacity-[0.08]">
+        <img 
+          src={ASSETS.logoWatermark} 
+          alt="Decoration" 
+          className="w-full h-auto object-contain filter brightness-0" 
+        />
+      </div>
+
+      {/* Main Content Centered */}
+      <div className="max-w-3xl mx-auto text-center relative z-10">
         <Reveal>
-          <div className="relative group">
-            <div className="absolute -inset-4 bg-brand-yellow/20 rounded-xl rotate-3 group-hover:rotate-6 transition-transform duration-500"></div>
-            <img src={ASSETS.team1} alt="Equipe BF" className="relative rounded-xl shadow-2xl grayscale hover:grayscale-0 transition-all duration-700 w-full object-cover h-[500px]" />
-            
-            <div className="absolute bottom-8 left-8 right-8 bg-black/80 backdrop-blur p-6 border-l-4 border-brand-yellow transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-              <h4 className="text-white font-bold text-xl">Especialistas Certificados</h4>
-              <p className="text-gray-400 text-sm">Meta Ads & Google Partner</p>
-            </div>
-          </div>
+          <h2 className="text-5xl md:text-7xl font-heading font-bold leading-none mb-6">
+            <span className="text-brand-yellow block">QUEM</span>
+            <span className="text-black block">SOMOS?</span>
+          </h2>
+          <div className="w-24 h-2 bg-brand-yellow mb-8 mx-auto"></div>
+          <p className="text-zinc-800 text-lg md:text-xl leading-relaxed font-medium">
+            Somos uma agência de marketing digital focada e <span className="font-bold">especializada em tráfego pago</span> com inteligência. 
+            Atendemos tanto clientes locais, como de todo o Brasil.
+          </p>
         </Reveal>
+      </div>
 
-        <Reveal delay={200}>
-          <div>
-            <h2 className="text-brand-yellow font-bold tracking-widest uppercase mb-2 text-sm">Quem Somos</h2>
-            <h3 className="text-3xl md:text-5xl font-heading font-bold text-white mb-6">
-              Mais que uma agência, <br/>seus parceiros de <span className="text-brand-yellow">crescimento.</span>
-            </h3>
-            <p className="text-gray-400 mb-6 leading-relaxed">
-              A BF Agência nasceu com um propósito claro: democratizar o acesso a estratégias de tráfego pago de alta performance para empresas que desejam escalar de verdade.
-            </p>
-            <p className="text-gray-400 mb-8 leading-relaxed">
-              Não somos apenas apertadores de botões. Somos estrategistas de dados. Utilizamos inteligência artificial e análise preditiva para garantir que cada centavo investido retorne como lucro para o seu caixa.
-            </p>
-
-            <div className="grid grid-cols-2 gap-6">
-              <div className="bg-black p-4 rounded-lg border border-zinc-800 hover:border-brand-yellow/50 transition-colors">
-                <h4 className="text-white font-bold mb-1">Foco em ROI</h4>
-                <p className="text-xs text-gray-500">Seu lucro é nossa meta</p>
-              </div>
-              <div className="bg-black p-4 rounded-lg border border-zinc-800 hover:border-brand-yellow/50 transition-colors">
-                <h4 className="text-white font-bold mb-1">Data Driven</h4>
-                <p className="text-xs text-gray-500">Decisões baseadas em dados</p>
-              </div>
-            </div>
-          </div>
-        </Reveal>
+      {/* Right Watermark Logo */}
+      <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-[20%] w-[400px] md:w-[600px] pointer-events-none opacity-[0.08]">
+        <img 
+          src={ASSETS.logoWatermark} 
+          alt="BF Watermark" 
+          className="w-full h-auto object-contain filter brightness-0" 
+        />
       </div>
     </div>
   </section>
@@ -237,6 +361,197 @@ const Services = () => (
   </section>
 );
 
+const TeamSection = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) setIsVisible(true);
+    }, { threshold: 0.2 });
+
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => { if (sectionRef.current) observer.unobserve(sectionRef.current); };
+  }, []);
+
+  return (
+    <section ref={sectionRef} className="relative w-full min-h-screen sm:min-h-[900px] flex flex-col items-center justify-between md:justify-end overflow-hidden bg-black pt-0 pb-0">
+      {/* Background */}
+      <div className="absolute inset-0 z-0">
+        <img src={ASSETS.teamBg} alt="Team Background" className="w-full h-full object-cover" />
+      </div>
+
+      {/* Header: Relative on Mobile (pushed by justify-between), Absolute on Desktop */}
+      <div className="relative md:absolute md:top-[12%] left-0 w-full z-30 flex items-center gap-4 md:gap-6 px-4 md:px-0 pt-32 md:pt-0 mb-8 md:mb-0">
+        {/* Animated Bar Shape */}
+        <div className={cn(
+            "h-3 md:h-12 bg-brand-yellow rounded-r-full shadow-[0_0_20px_rgba(255,193,7,0.6)] transition-all duration-1000 ease-out",
+            isVisible ? "w-12 md:w-24 opacity-100" : "w-0 opacity-0"
+        )}></div>
+
+        {/* Header Text */}
+        <h3 className={cn(
+            "text-white font-heading font-bold text-lg md:text-3xl max-w-2xl leading-tight transition-all duration-1000 delay-300",
+            isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"
+        )}>
+          Conheça o time que vai fazer diferença nos seus resultados:
+        </h3>
+      </div>
+
+      {/* Top Right Black Logo - Hidden on Mobile, moved left */}
+      <div className="absolute top-6 right-8 md:right-24 z-20 hidden md:block">
+        <img src={ASSETS.teamLogo} alt="BF Logo" className="w-24 sm:w-32 h-auto object-contain opacity-90" />
+      </div>
+
+      {/* Team Grid */}
+      <div className="container mx-auto px-4 relative z-10 w-full">
+        <div className="flex flex-col md:flex-row justify-center items-end gap-16 lg:gap-24 w-full">
+          
+          {/* Person 1 */}
+          <div className="relative w-full max-w-[550px] flex flex-col items-center group">
+             {/* Desktop Text - Left aligned with line */}
+             <div className={cn(
+               "absolute top-[20%] -left-[10%] z-30 text-left hidden md:block transition-all duration-700 delay-500",
+               isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"
+             )}>
+                <h4 className="text-brand-yellow font-heading font-bold text-3xl mb-1">Geriel Soglia</h4>
+                <div className="w-24 h-[2px] bg-white mb-1 shadow-[0_0_10px_rgba(255,255,255,0.8)]"></div>
+                <p className="text-white text-xl font-light">Gestor de tráfego</p>
+             </div>
+             
+             {/* Mobile Text */}
+             <div className="md:hidden w-full text-center mb-6">
+                <h4 className="text-brand-yellow font-heading font-bold text-3xl">Geriel Soglia</h4>
+                <div className="w-12 h-[2px] bg-white mx-auto my-2"></div>
+                <p className="text-white text-lg">Gestor de tráfego</p>
+             </div>
+
+             <div className="absolute bottom-0 left-[38%] -translate-x-1/2 w-[90%] h-[70%] z-0 opacity-60">
+                <img src={ASSETS.teamFrame} alt="" className="w-full h-full object-contain" />
+             </div>
+             <img 
+               src={ASSETS.teamPerson1} 
+               alt="Geriel" 
+               className="relative z-10 w-full h-auto object-contain drop-shadow-2xl transition-transform duration-500 hover:scale-105 origin-bottom"
+             />
+          </div>
+
+          {/* Person 2 */}
+          <div className="relative w-full max-w-[550px] flex flex-col items-center group">
+             {/* Desktop Text */}
+             <div className={cn(
+               "absolute top-[20%] -left-[10%] z-30 text-left hidden md:block transition-all duration-700 delay-700",
+               isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"
+             )}>
+                <h4 className="text-brand-yellow font-heading font-bold text-3xl mb-1">Marcos Júnior</h4>
+                <div className="w-24 h-[2px] bg-white mb-1 shadow-[0_0_10px_rgba(255,255,255,0.8)]"></div>
+                <p className="text-white text-xl font-light">Gestor de tráfego</p>
+             </div>
+             
+             {/* Mobile Text */}
+             <div className="md:hidden w-full text-center mb-6">
+                <h4 className="text-brand-yellow font-heading font-bold text-3xl">Marcos Júnior</h4>
+                <div className="w-12 h-[2px] bg-white mx-auto my-2"></div>
+                <p className="text-white text-lg">Gestor de tráfego</p>
+             </div>
+
+             <div className="absolute bottom-0 left-[38%] -translate-x-1/2 w-[90%] h-[70%] z-0 opacity-60">
+                <img src={ASSETS.teamFrame} alt="" className="w-full h-full object-contain" />
+             </div>
+             <img 
+               src={ASSETS.teamPerson2} 
+               alt="Marcos" 
+               className="relative z-10 w-full h-auto object-contain drop-shadow-2xl transition-transform duration-500 hover:scale-105 origin-bottom"
+             />
+          </div>
+
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const SolutionsSection = () => {
+  return (
+    <section className="relative bg-black pt-24 pb-48 overflow-visible z-30">
+      <div className="container mx-auto px-4 relative z-10">
+        
+        {/* Part 1: Solutions (White Card) */}
+        <Reveal>
+          <div className="text-center mb-12">
+            <h2 className="text-2xl md:text-4xl font-heading font-bold leading-tight">
+              <span className="text-brand-yellow">Solucionamos e sanamos</span> <span className="text-white">a demanda</span>
+              <br />
+              <span className="text-white">de acordo com sua necessidade:</span>
+            </h2>
+          </div>
+        </Reveal>
+
+        <Reveal delay={200}>
+          <div className="bg-white rounded-[2.5rem] p-8 md:p-12 max-w-3xl mx-auto shadow-2xl relative z-20 mb-16">
+            <div className="grid grid-cols-1 gap-6">
+              {SOLUTIONS_LIST.map((item, idx) => (
+                <div key={idx} className="flex items-center gap-4">
+                  <div className="min-w-[24px] text-brand-yellow">
+                    <MapPin className="fill-brand-yellow text-brand-yellow" size={24} />
+                  </div>
+                  <p className="text-black font-bold text-lg md:text-xl tracking-wide">{item}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Reveal>
+
+        {/* Part 2: Adaptation (Sharp Notebook) */}
+        <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-center gap-8 relative z-20 mt-32">
+           {/* Text Content - Centered */}
+           <div className="w-full lg:w-5/12 pl-0 md:pl-8 lg:pl-12">
+              <Reveal>
+                <h2 className="text-4xl md:text-5xl font-heading font-bold text-white mb-12">
+                  Adaptação diante <br/><span className="text-white">a concorrência:</span>
+                </h2>
+                <div className="flex flex-col gap-5">
+                  {ADAPTATION_ITEMS.map((item, idx) => (
+                    <div 
+                      key={idx} 
+                      className="group relative bg-zinc-900/60 backdrop-blur-md border border-white/10 rounded-2xl p-5 flex items-center gap-5 overflow-hidden transition-all duration-500 hover:border-brand-yellow/60 hover:bg-zinc-800/80 cursor-default hover:-translate-y-1 shadow-lg hover:shadow-[0_0_30px_rgba(255,193,7,0.15)]"
+                    >
+                       {/* Hover Gradient Background */}
+                       <div className="absolute inset-0 bg-gradient-to-r from-brand-yellow/0 via-brand-yellow/5 to-brand-yellow/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 pointer-events-none"></div>
+
+                       {/* Icon Box */}
+                       <div className="min-w-[60px] w-[60px] h-[60px] rounded-xl bg-black border border-zinc-800 flex items-center justify-center text-brand-yellow group-hover:scale-105 group-hover:border-brand-yellow/50 transition-all duration-300 shadow-inner">
+                          {item.icon}
+                       </div>
+
+                       {/* Text */}
+                       <h3 className="text-lg md:text-xl font-heading font-bold text-white group-hover:text-brand-yellow transition-colors leading-tight">
+                         {item.title}
+                       </h3>
+                    </div>
+                  ))}
+                </div>
+              </Reveal>
+           </div>
+           
+           {/* Sharp Notebook - Right - Hidden on responsive, visible on desktop */}
+           <div className="w-full lg:w-7/12 hidden lg:flex justify-center lg:justify-end">
+              <Reveal delay={200}>
+                 <img src={ASSETS.notebookBlack} alt="Dashboard" className="w-full max-w-lg h-auto object-contain drop-shadow-2xl" />
+              </Reveal>
+           </div>
+        </div>
+
+      </div>
+
+      {/* Blurred Notebook Transition - Bottom Left - Hidden on responsive */}
+      <div className="hidden lg:block absolute bottom-[-180px] left-[-80px] md:-left-[250px] z-30 w-[280px] md:w-[550px] pointer-events-none">
+        <img src={ASSETS.notebookBlur} alt="" className="w-full h-auto object-contain opacity-80" />
+      </div>
+    </section>
+  );
+};
+
 const Stats = () => {
   // Simplified counter logic for brevity
   return (
@@ -246,7 +561,7 @@ const Stats = () => {
           {STATS.map((stat, idx) => (
             <Reveal key={idx} delay={idx * 100}>
               <div className="flex flex-col items-center">
-                <div className="text-4xl md:text-6xl font-black text-brand-purple mb-2 flex items-baseline">
+                <div className="text-4xl md:text-6xl font-black text-brand-yellow mb-2 flex items-baseline">
                   {stat.value}<span className="text-2xl md:text-4xl">{stat.suffix}</span>
                 </div>
                 <div className="text-gray-400 uppercase text-xs md:text-sm tracking-widest font-bold">
@@ -262,46 +577,69 @@ const Stats = () => {
 };
 
 const WhyUs = () => (
-  <section className="py-24 bg-black relative">
-    <div className="container mx-auto px-4">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-        <Reveal className="order-2 lg:order-1">
-          <h2 className="text-3xl md:text-5xl font-heading font-bold text-white mb-8">
-            Por que escolher a <br/><span className="text-brand-yellow">BF Agência?</span>
-          </h2>
-          
-          <div className="space-y-6">
-            {[
-              "Somos especialistas em Meta e Google Ads certificado.",
-              "Conhecemos seu nicho como nenhuma outra agência.",
-              "Análise 100% da sua conta antes de contratar.",
-              "Suporte ágil e atendimento diferenciado no WhatsApp."
-            ].map((item, idx) => (
-              <div key={idx} className="flex items-start gap-4">
-                <div className="mt-1 min-w-[24px] min-h-[24px] bg-brand-purple/20 rounded-full flex items-center justify-center text-brand-purple">
-                  <Check size={14} strokeWidth={3} />
-                </div>
-                <p className="text-gray-300 text-lg">{item}</p>
-              </div>
-            ))}
-          </div>
-
-          <a href="https://wa.me/5573983069002?text=Olá! Vim pelo site da BF Agência." className="inline-block mt-10 text-brand-purple font-bold border-b border-brand-purple pb-1 hover:text-white hover:border-white transition-colors">
-            Você vai é precisar de um cofre novo &rarr;
-          </a>
-        </Reveal>
-
-        <Reveal delay={200} className="order-1 lg:order-2 relative">
-          <div className="absolute top-0 right-0 w-2/3 h-full bg-brand-yellow/5 rounded-3xl -z-10"></div>
-          <img src={ASSETS.team2} alt="Consultoria" className="rounded-2xl shadow-2xl w-full object-cover h-[600px] filter sepia-[.2] contrast-125" />
-        </Reveal>
+  <section className="py-24 bg-white relative overflow-hidden min-h-[900px] flex flex-col z-10">
+    <div className="container mx-auto px-4 relative z-10">
+      <div className="w-full max-w-4xl mx-auto mb-12 text-center">
+           <Reveal>
+            <h2 className="text-5xl md:text-6xl font-heading font-bold leading-tight mb-8">
+              <span className="text-brand-yellow">Porque</span>
+              <br/>
+              <span className="text-black">contratar a BF?</span>
+            </h2>
+            
+            <p className="text-zinc-600 text-lg max-w-md mx-auto">
+              Entenda como nossa metodologia única transforma seu investimento em resultados reais.
+            </p>
+          </Reveal>
+      </div>
+      
+      {/* Orbital Timeline Animation taking full width */}
+      <div className="w-full relative z-20 mt-8">
+         <RadialOrbitalTimeline />
       </div>
     </div>
   </section>
 );
 
+const PartnershipSection = () => {
+  return (
+    <section className="relative bg-black pt-48 pb-0 z-20 overflow-visible">
+       <div className="container mx-auto px-4 relative">
+          
+          {/* Flex container for Logo and Card - Center/Left alignment */}
+          <div className="flex flex-col lg:flex-row items-center justify-center lg:justify-start gap-8 lg:gap-0 max-w-7xl mx-auto relative z-10 pb-12 lg:pb-24">
+             
+             {/* Logo - positioned left of card */}
+             <img 
+                src={ASSETS.logoYellow} 
+                alt="BF" 
+                className="w-32 lg:w-48 h-auto object-contain shrink-0 relative z-20 lg:mr-12" 
+             />
+
+             {/* Yellow Card with extra padding right for the person overlay */}
+             <div className="bg-brand-yellow rounded-3xl p-8 md:p-12 lg:pr-64 shadow-[0_0_30px_rgba(255,193,7,0.2)] relative z-10 w-full lg:w-auto lg:min-w-[650px]">
+                  <h2 className="text-2xl md:text-3xl lg:text-5xl font-heading font-bold text-black leading-tight max-w-2xl">
+                       “Nós não queremos clientes, <span className="font-black">queremos</span> <br/>parceiros!”
+                  </h2>
+             </div>
+          </div>
+
+          {/* Person Image - Absolute positioned to overlap card and top section */}
+          <div className="relative lg:absolute lg:bottom-0 lg:right-0 xl:right-20 w-[300px] md:w-[450px] lg:w-[500px] z-30 pointer-events-none flex justify-center mx-auto lg:mx-0 mt-[-40px] lg:mt-0">
+             {/* Removed negative translate so feet align with bottom border */}
+             <img 
+               src={ASSETS.partnerPerson} 
+               alt="Parceiro" 
+               className="w-full h-auto object-contain drop-shadow-2xl transform lg:translate-y-0 origin-bottom" 
+             /> 
+          </div>
+       </div>
+    </section>
+  )
+};
+
 const Testimonials = () => (
-  <section className="py-24 bg-brand-dark overflow-hidden">
+  <section className="py-24 bg-brand-dark overflow-hidden relative z-30">
     <div className="container mx-auto px-4 mb-12 text-center">
       <h2 className="text-3xl font-heading font-bold text-white">O que dizem nossos <span className="text-brand-yellow">Parceiros</span></h2>
     </div>
@@ -379,11 +717,11 @@ const Footer = () => (
           <h4 className="text-white font-bold mb-6 uppercase tracking-wider">Contato</h4>
           <ul className="space-y-4">
             <li className="flex items-center gap-3 text-gray-400 hover:text-brand-yellow transition-colors">
-              <Phone size={18} className="text-brand-purple" />
+              <Phone size={18} className="text-brand-yellow" />
               <span>+55 73 9830-6902</span>
             </li>
             <li className="flex items-center gap-3 text-gray-400 hover:text-brand-yellow transition-colors">
-              <Mail size={18} className="text-brand-purple" />
+              <Mail size={18} className="text-brand-yellow" />
               <span>onzycompany@gmail.com</span>
             </li>
             <li className="flex items-center gap-3 text-gray-400">
@@ -437,11 +775,15 @@ const App: React.FC = () => {
     <div className="bg-black min-h-screen font-sans text-white selection:bg-brand-yellow selection:text-black">
       <Navbar onOpenModal={() => setIsModalOpen(true)} />
       <Hero onOpenModal={() => setIsModalOpen(true)} />
+      <IntroSection />
       <About />
       <Services />
-      <Stats />
+      <TeamSection />
+      <SolutionsSection />
       <WhyUs />
+      <PartnershipSection />
       <Testimonials />
+      <Stats />
       <CtaSection onOpenModal={() => setIsModalOpen(true)} />
       <Footer />
       
