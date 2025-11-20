@@ -41,7 +41,7 @@ export const SolutionsSection = () => {
         {/* Part 2: Adaptation (Overlap Layout) */}
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-end gap-0 relative z-20 mt-40">
            
-           {/* Text Content - Centered/Right */}
+           {/* Text Content - Pushed Far Right to approach Notebook */}
            <div className="w-full lg:w-1/2 lg:pl-36 z-20 relative order-2 lg:order-1">
               <Reveal>
                 <h2 className="text-4xl md:text-5xl font-heading font-bold text-white mb-10">
@@ -69,7 +69,7 @@ export const SolutionsSection = () => {
               </Reveal>
            </div>
            
-           {/* Sharp Notebook - Pushed Right (justify-end) */}
+           {/* Sharp Notebook - Justify End (Right aligned) */}
            <div className="w-full lg:w-1/2 hidden lg:flex justify-end relative z-10 order-1 lg:order-2">
               <Reveal delay={200}>
                  <div className="relative">
@@ -86,8 +86,9 @@ export const SolutionsSection = () => {
 
       </div>
 
-      <div className="hidden lg:block absolute bottom-[-80px] left-[-40px] md:-left-[40px] z-30 w-[150px] md:w-[300px] pointer-events-none">
-        <img src={ASSETS.notebookBlur} alt="" className="w-full h-auto object-contain" />
+      {/* Blurred Notebook - Left Side - Small & Opaque */}
+      <div className="hidden lg:block absolute bottom-[-80px] left-[-40px] z-30 w-[150px] pointer-events-none">
+        <img src={ASSETS.notebookBlur} alt="" className="w-full h-auto object-contain opacity-100" />
       </div>
     </section>
   );

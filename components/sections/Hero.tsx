@@ -12,7 +12,8 @@ export const Hero = ({ onOpenModal }: { onOpenModal: () => void }) => {
         <img src={ASSETS.heroBg} alt="Background" className="w-full h-full object-cover opacity-100" />
       </div>
 
-      <div className="container mx-auto px-4 pb-32 relative z-20 flex flex-col items-center text-center">
+      {/* Increased bottom padding (pb-48) to give space for the arrow */}
+      <div className="container mx-auto px-4 pb-48 relative z-20 flex flex-col items-center text-center">
         <Reveal>
           <img src={ASSETS.heroLogo} alt="BF Agência" className="w-64 md:w-80 lg:w-96 mx-auto mb-8 drop-shadow-2xl" />
         </Reveal>
@@ -43,7 +44,8 @@ export const Hero = ({ onOpenModal }: { onOpenModal: () => void }) => {
           </div>
         </Reveal>
 
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce text-gray-500">
+        {/* Arrow positioned lower with bottom-12 to separate from buttons */}
+        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce text-gray-500">
           <ArrowRight className="rotate-90" />
         </div>
       </div>

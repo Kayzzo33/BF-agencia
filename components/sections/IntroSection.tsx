@@ -28,17 +28,19 @@ export const IntroSection = () => {
         </div>
 
         <div className="w-full md:w-1/2 relative h-[500px] md:h-[700px] flex items-end justify-center md:justify-end pb-10">
+          {/* Static Arrow Image */}
           <img 
             src={ASSETS.arrow} 
             alt="Arrow" 
             className="absolute bottom-0 right-0 w-[90%] md:w-[80%] object-contain z-10"
             style={{ maxHeight: '90%' }}
           />
-          <div className="relative z-20 w-[85%] md:w-[75%] md:-mr-10 mb-10 md:mb-20">
+          {/* Floating Notebook with gentle animation */}
+          <div className="relative z-20 w-[85%] md:w-[75%] md:-mr-10 mb-10 md:mb-20 animate-float">
             <img 
               src={ASSETS.notebook} 
               alt="Dashboard" 
-              className="w-full h-auto object-contain drop-shadow-2xl transform -rotate-2 hover:rotate-0 transition-transform duration-700"
+              className="w-full h-auto object-contain drop-shadow-2xl"
             />
           </div>
         </div>

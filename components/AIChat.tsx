@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageSquare, X, Send, Sparkles, Bot } from 'lucide-react';
+import { MessageSquare, X, Send, Bot } from 'lucide-react';
 import { generateAIResponse } from '../services/geminiService';
 
 export const AIChat: React.FC = () => {
@@ -43,7 +43,7 @@ export const AIChat: React.FC = () => {
         className={`fixed bottom-24 right-5 z-[90] bg-zinc-800 hover:bg-zinc-700 text-white p-3 rounded-full shadow-lg border border-brand-yellow/30 transition-all duration-300 ${isOpen ? 'opacity-0 pointer-events-none' : 'opacity-100 scale-100'}`}
         title="Falar com IA"
       >
-        <Sparkles size={24} className="text-brand-yellow" />
+        <Bot size={24} className="text-brand-yellow" />
       </button>
 
       {/* Chat Window */}
