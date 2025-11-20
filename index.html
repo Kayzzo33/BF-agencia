@@ -34,11 +34,24 @@
             animation: {
               'scroll': 'scroll 40s linear infinite',
               'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'float': 'float 6s ease-in-out infinite',
+              'rise': 'rise 3s linear infinite',
+              'rise-delayed': 'rise 3s linear infinite 1.5s',
             },
             keyframes: {
               scroll: {
                 '0%': { transform: 'translateX(0)' },
                 '100%': { transform: 'translateX(-50%)' },
+              },
+              float: {
+                '0%, 100%': { transform: 'translateY(0) rotate(-1deg)' },
+                '50%': { transform: 'translateY(-15px) rotate(1deg)' },
+              },
+              rise: {
+                '0%': { transform: 'translateY(100%)', opacity: '0' },
+                '10%': { opacity: '1' },
+                '90%': { opacity: '1' },
+                '100%': { transform: 'translateY(-100%)', opacity: '0' },
               }
             }
           }
