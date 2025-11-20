@@ -134,7 +134,6 @@ export default function RadialOrbitalTimeline() {
     let rotationTimer: number | undefined;
 
     if (autoRotate && viewMode === "orbital") {
-      // Explicitly use window.setInterval to ensure we get a number ID back, not a NodeJS.Timeout
       rotationTimer = window.setInterval(() => {
         setRotationAngle((prev) => {
           const newAngle = (prev + 0.2) % 360;
@@ -162,7 +161,6 @@ export default function RadialOrbitalTimeline() {
 
   const calculateNodePosition = (index: number, total: number) => {
     const angle = ((index / total) * 360 + rotationAngle) % 360;
-    // Radius for desktop and mobile
     const radius = typeof window !== 'undefined' && window.innerWidth < 768 ? 140 : 220;
     const radian = (angle * Math.PI) / 180;
 

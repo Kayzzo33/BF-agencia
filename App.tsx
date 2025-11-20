@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Menu, X, MessageCircle, ArrowRight, Check, Instagram, Facebook, Linkedin, Mail, Phone, Target, TrendingUp, Users, ShieldCheck, Cpu, Sparkles, MapPin, ScanEye, CheckCircle2 } from 'lucide-react';
+import { Menu, X, MessageCircle, ArrowRight, Check, Instagram, Facebook, Linkedin, Mail, Phone, Target, TrendingUp, Users, ShieldCheck, Cpu, Sparkles, MapPin, ScanEye, CheckCircle2, ChevronRight, Star } from 'lucide-react';
 import { cn } from './utils';
 import { Modal } from './components/Modal';
 import { Reveal } from './components/Reveal';
@@ -9,33 +9,23 @@ import RadialOrbitalTimeline from './components/RadialOrbitalTimeline';
 // Assets configuration
 const ASSETS = {
   heroBg: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763568231/BackGround_Hero_boqfkf.jpg", 
-  // New Logos
   logoMain: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763570166/logo_hero_qw4x5l.png",
   logoText: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763570163/agencia_logo_hero_dr6zrq.png",
   heroLogo: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763569572/Logo_Preta_p7evqr.png",
   logoWatermark: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763569572/logo_branco_z9jsgg.png",
-  
-  // Intro Section Assets
   introBg: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763573021/fundo_section2_rys2qf.jpg",
   notebook: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763573334/notebook_cffgac.png",
   arrow: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763573324/SETAS_o6qbsb.png",
   logoYellow: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763569572/logo_amarela_gb7rgq.png",
-
-  // Team Section Assets
   teamBg: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763576420/Fundobsluan_tagksa.jpg",
-  teamPerson1: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763575835/BFCOMSOMBRA_lnyxdd.png", // Geriel
-  teamPerson2: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763575823/LuanComSombra_zs8shq.png", // Marcos
+  teamPerson1: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763575835/BFCOMSOMBRA_lnyxdd.png",
+  teamPerson2: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763575823/LuanComSombra_zs8shq.png",
   teamFrame: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763576406/QuadradoLinha_rtqqjk.png",
   teamLogo: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763569572/Logo_Preta_p7evqr.png",
-
-  // Solutions Assets
-  notebookBlack: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763581102/notebookblack_or44lx.png",
+  // Updated Black Notebook URL
+  notebookBlack: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763671478/notebookblack_-_Editado_gba0ri.png",
   notebookBlur: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763581375/notebookblackdesfocado_ndrxwe.png",
-  
-  // Partnership Section
   partnerPerson: "https://res.cloudinary.com/dxhlvrach/image/upload/v1763569573/bf_cinza_v5jmst.png",
-
-  team2: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=2574&auto=format&fit=crop", 
 };
 
 // Data
@@ -75,6 +65,13 @@ const ADAPTATION_ITEMS = [
   { title: "Observação de mercado", icon: <ScanEye size={28} /> },
   { title: "Análise completa do nicho", icon: <Target size={28} /> },
   { title: "Direcionamento estratégico de público", icon: <Users size={28} /> }
+];
+
+const EXTENDED_TEAM = [
+  { name: "Ytallo", role: "Gestor de Tráfego", instagram: "@ytallo", image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1000&auto=format&fit=crop" },
+  { name: "Evy", role: "Gestor de Tráfego", instagram: "@evy", image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1000&auto=format&fit=crop" },
+  { name: "Ane", role: "Suporte", instagram: "@ane", image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1000&auto=format&fit=crop" },
+  { name: "Gleice", role: "Suporte", instagram: "@gleice", image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1000&auto=format&fit=crop" },
 ];
 
 // --- Helper Components ---
@@ -134,14 +131,11 @@ const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
         )}
       >
         <div className="flex items-center gap-3">
-          {/* Main Logo Symbol */}
           <img 
             src={ASSETS.logoMain} 
             alt="BF Logo" 
             className="h-8 w-auto object-contain transition-transform hover:scale-110" 
           />
-          
-          {/* Text Logo - Collapses on scroll */}
           <div className={cn(
             "overflow-hidden transition-all duration-500 ease-in-out flex items-center",
             isScrolled ? "w-0 opacity-0" : "w-24 sm:w-32 opacity-100"
@@ -154,36 +148,10 @@ const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
           </div>
         </div>
 
-        {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-8">
-          <a 
-            href="#home" 
-            className={cn(
-              "transition-colors text-sm uppercase tracking-wider font-bold",
-              // If scrolled, light gray (on black). If not scrolled, BLACK (on yellow hero).
-              isScrolled ? "text-gray-300 hover:text-brand-yellow" : "text-black hover:text-zinc-700"
-            )}
-          >
-            Início
-          </a>
-          <a 
-            href="#about" 
-            className={cn(
-              "transition-colors text-sm uppercase tracking-wider font-bold",
-              isScrolled ? "text-gray-300 hover:text-brand-yellow" : "text-black hover:text-zinc-700"
-            )}
-          >
-            Quem Somos
-          </a>
-          <a 
-            href="#services" 
-            className={cn(
-              "transition-colors text-sm uppercase tracking-wider font-bold",
-              isScrolled ? "text-gray-300 hover:text-brand-yellow" : "text-black hover:text-zinc-700"
-            )}
-          >
-            Serviços
-          </a>
+          <a href="#home" className={cn("transition-colors text-sm uppercase tracking-wider font-bold", isScrolled ? "text-gray-300 hover:text-brand-yellow" : "text-black hover:text-zinc-700")}>Início</a>
+          <a href="#about" className={cn("transition-colors text-sm uppercase tracking-wider font-bold", isScrolled ? "text-gray-300 hover:text-brand-yellow" : "text-black hover:text-zinc-700")}>Quem Somos</a>
+          <a href="#services" className={cn("transition-colors text-sm uppercase tracking-wider font-bold", isScrolled ? "text-gray-300 hover:text-brand-yellow" : "text-black hover:text-zinc-700")}>Serviços</a>
         </div>
 
         <div className="flex items-center gap-4">
@@ -196,8 +164,6 @@ const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
           >
             Falar com Especialista
           </button>
-
-          {/* Mobile Toggle */}
           <button 
             className={cn("md:hidden transition-colors", isScrolled ? "text-white" : "text-black")} 
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -206,7 +172,6 @@ const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
           </button>
         </div>
 
-        {/* Mobile Menu Dropdown */}
         {isMenuOpen && (
           <div className="absolute top-full mt-4 left-0 right-0 bg-zinc-900/95 backdrop-blur-lg border border-white/10 rounded-2xl p-4 flex flex-col gap-4 md:hidden animate-[fadeIn_0.2s] shadow-2xl mx-4">
             <a href="#home" className="text-white p-2 text-center font-medium hover:text-brand-yellow" onClick={() => setIsMenuOpen(false)}>Início</a>
@@ -222,21 +187,14 @@ const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
 const Hero = ({ onOpenModal }: { onOpenModal: () => void }) => {
   return (
     <section id="home" className="relative min-h-screen flex items-center pt-20 overflow-hidden">
-      {/* Background */}
       <div className="absolute inset-0 z-0">
-        {/* Adjusted overlay to let the yellow background shine through for the black logo, but darken at bottom for flow */}
         <div className="absolute inset-0 bg-gradient-to-b from-brand-yellow/10 via-transparent to-black/90 z-10"></div>
         <img src={ASSETS.heroBg} alt="Background" className="w-full h-full object-cover opacity-100" />
       </div>
 
       <div className="container mx-auto px-4 relative z-20 flex flex-col items-center text-center">
-        
         <Reveal>
-          <img 
-            src={ASSETS.heroLogo} 
-            alt="BF Agência" 
-            className="w-64 md:w-80 lg:w-96 mx-auto mb-8 drop-shadow-2xl"
-          />
+          <img src={ASSETS.heroLogo} alt="BF Agência" className="w-64 md:w-80 lg:w-96 mx-auto mb-8 drop-shadow-2xl" />
         </Reveal>
         
         <Reveal delay={200}>
@@ -265,7 +223,6 @@ const Hero = ({ onOpenModal }: { onOpenModal: () => void }) => {
           </div>
         </Reveal>
 
-        {/* Scroll Indicator */}
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce text-gray-500">
           <ArrowRight className="rotate-90" />
         </div>
@@ -277,20 +234,16 @@ const Hero = ({ onOpenModal }: { onOpenModal: () => void }) => {
 const IntroSection = () => {
   return (
     <section className="relative w-full min-h-[700px] flex items-center overflow-hidden bg-black">
-      {/* Background */}
       <div className="absolute inset-0 z-0">
         <img src={ASSETS.introBg} alt="Intro Background" className="w-full h-full object-cover" />
-        {/* Gradient overlay to ensure text readability */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-transparent z-10"></div>
       </div>
 
-      {/* Logo Top Right */}
       <div className="absolute top-8 right-8 z-30">
         <img src={ASSETS.logoYellow} alt="BF Logo" className="w-24 md:w-32 opacity-90 hover:opacity-100 transition-opacity" />
       </div>
 
       <div className="container mx-auto px-4 relative z-20 h-full flex flex-col md:flex-row items-center">
-        {/* Left: Text Content */}
         <div className="w-full md:w-1/2 pt-20 md:pt-0 pl-4 md:pl-12">
           <Reveal>
             <h2 className="font-heading font-black text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] uppercase tracking-tight">
@@ -302,17 +255,13 @@ const IntroSection = () => {
           </Reveal>
         </div>
 
-        {/* Right: Visuals */}
         <div className="w-full md:w-1/2 relative h-[500px] md:h-[700px] flex items-end justify-center md:justify-end pb-10">
-          {/* Arrow Image - Static (Reverted) */}
           <img 
             src={ASSETS.arrow} 
             alt="Arrow" 
             className="absolute bottom-0 right-0 w-[90%] md:w-[80%] object-contain z-10"
             style={{ maxHeight: '90%' }}
           />
-          
-          {/* Notebook - Static/Simple Entry (Reverted) */}
           <div className="relative z-20 w-[85%] md:w-[75%] md:-mr-10 mb-10 md:mb-20">
             <img 
               src={ASSETS.notebook} 
@@ -329,16 +278,10 @@ const IntroSection = () => {
 const About = () => (
   <section id="about" className="py-24 bg-white relative overflow-hidden">
     <div className="container mx-auto px-4 relative">
-      {/* Duplicated partial logo on the Left (Cutoff) */}
       <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[40%] w-[300px] md:w-[500px] pointer-events-none opacity-[0.08]">
-        <img 
-          src={ASSETS.logoWatermark} 
-          alt="Decoration" 
-          className="w-full h-auto object-contain filter brightness-0" 
-        />
+        <img src={ASSETS.logoWatermark} alt="Decoration" className="w-full h-auto object-contain filter brightness-0" />
       </div>
 
-      {/* Main Content Centered */}
       <div className="max-w-3xl mx-auto text-center relative z-10">
         <Reveal>
           <h2 className="text-5xl md:text-7xl font-heading font-bold leading-none mb-6">
@@ -353,13 +296,8 @@ const About = () => (
         </Reveal>
       </div>
 
-      {/* Right Watermark Logo */}
       <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-[20%] w-[400px] md:w-[600px] pointer-events-none opacity-[0.08]">
-        <img 
-          src={ASSETS.logoWatermark} 
-          alt="BF Watermark" 
-          className="w-full h-auto object-contain filter brightness-0" 
-        />
+        <img src={ASSETS.logoWatermark} alt="BF Watermark" className="w-full h-auto object-contain filter brightness-0" />
       </div>
     </div>
   </section>
@@ -411,107 +349,128 @@ const TeamSection = () => {
 
   return (
     <section ref={sectionRef} className="relative w-full min-h-screen sm:min-h-[900px] flex flex-col items-center justify-between md:justify-end overflow-hidden bg-black pt-0 pb-0">
-      {/* Background */}
       <div className="absolute inset-0 z-0">
         <img src={ASSETS.teamBg} alt="Team Background" className="w-full h-full object-cover" />
       </div>
 
-      {/* Header: Relative on Mobile (pushed by justify-between), Absolute on Desktop */}
       <div className="relative md:absolute md:top-[12%] left-0 w-full z-30 flex items-center gap-4 md:gap-6 px-4 md:px-0 pt-32 md:pt-0 mb-8 md:mb-0">
-        {/* Animated Bar Shape */}
-        <div className={cn(
-            "h-3 md:h-12 bg-brand-yellow rounded-r-full shadow-[0_0_20px_rgba(255,193,7,0.6)] transition-all duration-1000 ease-out",
-            isVisible ? "w-12 md:w-24 opacity-100" : "w-0 opacity-0"
-        )}></div>
-
-        {/* Header Text */}
-        <h3 className={cn(
-            "text-white font-heading font-bold text-lg md:text-3xl max-w-2xl leading-tight transition-all duration-1000 delay-300",
-            isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"
-        )}>
+        <div className={cn("h-3 md:h-12 bg-brand-yellow rounded-r-full shadow-[0_0_20px_rgba(255,193,7,0.6)] transition-all duration-1000 ease-out", isVisible ? "w-12 md:w-24 opacity-100" : "w-0 opacity-0")}></div>
+        <h3 className={cn("text-white font-heading font-bold text-lg md:text-3xl max-w-2xl leading-tight transition-all duration-1000 delay-300", isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10")}>
           Conheça o time que vai fazer diferença nos seus resultados:
         </h3>
       </div>
 
-      {/* Top Right Black Logo - Hidden on Mobile, moved left */}
       <div className="absolute top-6 right-8 md:right-24 z-20 hidden md:block">
         <img src={ASSETS.teamLogo} alt="BF Logo" className="w-24 sm:w-32 h-auto object-contain opacity-90" />
       </div>
 
-      {/* Team Grid */}
       <div className="container mx-auto px-4 relative z-10 w-full">
         <div className="flex flex-col md:flex-row justify-center items-end gap-16 lg:gap-24 w-full">
-          
-          {/* Person 1 */}
           <div className="relative w-full max-w-[550px] flex flex-col items-center group">
-             {/* Desktop Text - Left aligned with line */}
-             <div className={cn(
-               "absolute top-[20%] -left-[10%] z-30 text-left hidden md:block transition-all duration-700 delay-500",
-               isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"
-             )}>
+             <div className={cn("absolute top-[20%] -left-[10%] z-30 text-left hidden md:block transition-all duration-700 delay-500", isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10")}>
                 <h4 className="text-brand-yellow font-heading font-bold text-3xl mb-1">Geriel Soglia</h4>
                 <div className="w-24 h-[2px] bg-white mb-1 shadow-[0_0_10px_rgba(255,255,255,0.8)]"></div>
                 <p className="text-white text-xl font-light">Gestor de tráfego</p>
              </div>
-             
-             {/* Mobile Text */}
              <div className="md:hidden w-full text-center mb-6">
                 <h4 className="text-brand-yellow font-heading font-bold text-3xl">Geriel Soglia</h4>
                 <div className="w-12 h-[2px] bg-white mx-auto my-2"></div>
                 <p className="text-white text-lg">Gestor de tráfego</p>
              </div>
-
              <div className="absolute bottom-0 left-[38%] -translate-x-1/2 w-[90%] h-[70%] z-0 opacity-60">
                 <img src={ASSETS.teamFrame} alt="" className="w-full h-full object-contain" />
              </div>
-             <img 
-               src={ASSETS.teamPerson1} 
-               alt="Geriel" 
-               className="relative z-10 w-full h-auto object-contain drop-shadow-2xl transition-transform duration-500 hover:scale-105 origin-bottom"
-             />
+             <img src={ASSETS.teamPerson1} alt="Geriel" className="relative z-10 w-full h-auto object-contain drop-shadow-2xl transition-transform duration-500 hover:scale-105 origin-bottom" />
           </div>
-
-          {/* Person 2 */}
           <div className="relative w-full max-w-[550px] flex flex-col items-center group">
-             {/* Desktop Text */}
-             <div className={cn(
-               "absolute top-[20%] -left-[10%] z-30 text-left hidden md:block transition-all duration-700 delay-700",
-               isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"
-             )}>
+             <div className={cn("absolute top-[20%] -left-[10%] z-30 text-left hidden md:block transition-all duration-700 delay-700", isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10")}>
                 <h4 className="text-brand-yellow font-heading font-bold text-3xl mb-1">Marcos Júnior</h4>
                 <div className="w-24 h-[2px] bg-white mb-1 shadow-[0_0_10px_rgba(255,255,255,0.8)]"></div>
                 <p className="text-white text-xl font-light">Gestor de tráfego</p>
              </div>
-             
-             {/* Mobile Text */}
              <div className="md:hidden w-full text-center mb-6">
                 <h4 className="text-brand-yellow font-heading font-bold text-3xl">Marcos Júnior</h4>
                 <div className="w-12 h-[2px] bg-white mx-auto my-2"></div>
                 <p className="text-white text-lg">Gestor de tráfego</p>
              </div>
-
              <div className="absolute bottom-0 left-[38%] -translate-x-1/2 w-[90%] h-[70%] z-0 opacity-60">
                 <img src={ASSETS.teamFrame} alt="" className="w-full h-full object-contain" />
              </div>
-             <img 
-               src={ASSETS.teamPerson2} 
-               alt="Marcos" 
-               className="relative z-10 w-full h-auto object-contain drop-shadow-2xl transition-transform duration-500 hover:scale-105 origin-bottom"
-             />
+             <img src={ASSETS.teamPerson2} alt="Marcos" className="relative z-10 w-full h-auto object-contain drop-shadow-2xl transition-transform duration-500 hover:scale-105 origin-bottom" />
           </div>
-
         </div>
       </div>
     </section>
   );
 };
 
+const ExtendedTeamSection = () => {
+  const [activeCard, setActiveCard] = useState<number | null>(null);
+
+  return (
+    <section className="py-24 bg-black relative overflow-hidden">
+       <div className="container mx-auto px-4">
+          <Reveal>
+             <h2 className="text-3xl md:text-4xl font-heading font-bold text-white text-center mb-16">
+               Equipe de <span className="text-brand-yellow">Alta Performance</span>
+             </h2>
+          </Reveal>
+          
+          <div className="flex flex-wrap justify-center gap-8">
+             {EXTENDED_TEAM.map((member, idx) => {
+               const isActive = activeCard === idx;
+               return (
+                 <div 
+                   key={idx}
+                   onClick={() => setActiveCard(isActive ? null : idx)}
+                   className={cn(
+                     "relative bg-zinc-900 border border-zinc-800 rounded-2xl p-6 cursor-pointer transition-all duration-500 ease-out overflow-hidden group",
+                     isActive ? "w-full md:w-[500px] bg-zinc-800 border-brand-yellow shadow-[0_0_30px_rgba(255,193,7,0.2)] scale-105 z-10" : "w-[280px] hover:bg-zinc-800 hover:-translate-y-2"
+                   )}
+                 >
+                    <div className="flex items-center gap-4">
+                       <div className={cn(
+                         "rounded-full overflow-hidden border-2 border-brand-yellow/50 transition-all duration-500",
+                         isActive ? "w-24 h-24 border-brand-yellow" : "w-16 h-16"
+                       )}>
+                          <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
+                       </div>
+                       <div>
+                          <h3 className="text-white font-bold text-xl">{member.name}</h3>
+                          <p className="text-brand-yellow text-sm uppercase tracking-wider font-medium">{member.role}</p>
+                       </div>
+                    </div>
+
+                    <div className={cn(
+                      "mt-6 pt-6 border-t border-white/10 transition-all duration-500 overflow-hidden",
+                      isActive ? "max-h-[200px] opacity-100" : "max-h-0 opacity-0"
+                    )}>
+                       <p className="text-gray-300 text-sm leading-relaxed mb-4">
+                         Especialista dedicado a garantir que suas campanhas performem no mais alto nível, com foco total em resultados.
+                       </p>
+                       <a href={`https://instagram.com/${member.instagram.replace('@','')}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-white hover:text-brand-yellow transition-colors text-sm font-bold">
+                          <Instagram size={18} />
+                          {member.instagram}
+                       </a>
+                    </div>
+
+                    {/* Decorative Orbit */}
+                    <div className="absolute -right-10 -bottom-10 w-32 h-32 border border-white/5 rounded-full group-hover:border-brand-yellow/20 transition-colors pointer-events-none"></div>
+                 </div>
+               )
+             })}
+          </div>
+       </div>
+    </section>
+  )
+}
+
 const SolutionsSection = () => {
   return (
     <section className="relative bg-black pt-24 pb-48 overflow-visible z-30">
       <div className="container mx-auto px-4 relative z-10">
         
-        {/* Part 1: Solutions (Premium Dark Glass Grid) */}
+        {/* Part 1: Solutions (Premium Grid) */}
         <Reveal>
           <div className="text-center mb-12">
             <h2 className="text-2xl md:text-4xl font-heading font-bold leading-tight">
@@ -528,7 +487,6 @@ const SolutionsSection = () => {
                 <Reveal key={idx} delay={idx * 50}>
                   <div className="group relative bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 flex items-start gap-4 overflow-hidden transition-all duration-300 hover:border-brand-yellow hover:shadow-[0_0_25px_rgba(255,193,7,0.15)] hover:-translate-y-1 cursor-default h-full backdrop-blur-sm">
                     <div className="absolute inset-0 bg-gradient-to-br from-brand-yellow/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-                    
                     <div className="mt-1 min-w-[28px]">
                       <div className="w-7 h-7 rounded-full bg-black border border-zinc-700 flex items-center justify-center text-brand-yellow group-hover:bg-brand-yellow group-hover:text-black transition-colors shadow-md">
                         <CheckCircle2 size={16} />
@@ -542,9 +500,10 @@ const SolutionsSection = () => {
         </div>
 
         {/* Part 2: Adaptation (Overlap Layout) */}
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-center gap-8 relative z-20 mt-40">
-           {/* Text Content - Pushed Right */}
-           <div className="w-full lg:w-7/12 lg:pl-12 z-20 relative order-2 lg:order-1">
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-end gap-0 relative z-20 mt-40">
+           
+           {/* Text Content - Centered/Right */}
+           <div className="w-full lg:w-1/2 lg:pl-36 z-20 relative order-2 lg:order-1">
               <Reveal>
                 <h2 className="text-4xl md:text-5xl font-heading font-bold text-white mb-10">
                   Adaptação diante <br/><span className="text-brand-yellow">a concorrência:</span>
@@ -555,19 +514,13 @@ const SolutionsSection = () => {
                       key={idx} 
                       className="group relative bg-zinc-950/80 backdrop-blur-xl border border-zinc-800 rounded-2xl p-6 flex items-center gap-6 overflow-hidden transition-all duration-500 hover:border-brand-yellow hover:bg-zinc-900/90 cursor-default hover:-translate-y-1 shadow-lg hover:shadow-[0_0_30px_rgba(255,193,7,0.1)] w-full max-w-xl"
                     >
-                       {/* Hover Gradient Background */}
                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-brand-yellow/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out pointer-events-none"></div>
-
-                       {/* Icon Box */}
                        <div className="min-w-[64px] w-[64px] h-[64px] rounded-xl bg-black border border-zinc-800 flex items-center justify-center text-brand-yellow group-hover:scale-110 group-hover:border-brand-yellow/50 transition-all duration-300 shadow-inner relative z-10">
                           {item.icon}
                        </div>
-
-                       {/* Text */}
                        <h3 className="text-lg md:text-xl font-heading font-bold text-white group-hover:text-brand-yellow transition-colors leading-tight relative z-10">
                          {item.title}
                        </h3>
-                       
                        <div className="absolute right-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0 text-brand-yellow">
                           <ArrowRight size={20} />
                        </div>
@@ -577,11 +530,10 @@ const SolutionsSection = () => {
               </Reveal>
            </div>
            
-           {/* Sharp Notebook - Pushed Left & Overlapping */}
-           <div className="w-full lg:w-5/12 hidden lg:flex justify-end lg:-ml-12 relative z-10 order-1 lg:order-2">
+           {/* Sharp Notebook - Pushed Right (justify-end) */}
+           <div className="w-full lg:w-1/2 hidden lg:flex justify-end relative z-10 order-1 lg:order-2">
               <Reveal delay={200}>
                  <div className="relative">
-                    {/* Glow effect behind notebook */}
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-brand-yellow/10 blur-[100px] rounded-full pointer-events-none"></div>
                     <img 
                       src={ASSETS.notebookBlack} 
@@ -595,9 +547,8 @@ const SolutionsSection = () => {
 
       </div>
 
-      {/* Blurred Notebook Transition - Bottom Left - Hidden on responsive */}
-      <div className="hidden lg:block absolute bottom-[-180px] left-[-80px] md:-left-[250px] z-30 w-[280px] md:w-[550px] pointer-events-none">
-        <img src={ASSETS.notebookBlur} alt="" className="w-full h-auto object-contain opacity-80" />
+      <div className="hidden lg:block absolute bottom-[-80px] left-[-40px] md:-left-[40px] z-30 w-[150px] md:w-[300px] pointer-events-none">
+        <img src={ASSETS.notebookBlur} alt="" className="w-full h-auto object-contain" />
       </div>
     </section>
   );
@@ -643,8 +594,6 @@ const WhyUs = () => (
             </p>
           </Reveal>
       </div>
-      
-      {/* Orbital Timeline Animation taking full width */}
       <div className="w-full relative z-20 mt-8">
          <RadialOrbitalTimeline />
       </div>
@@ -656,33 +605,16 @@ const PartnershipSection = () => {
   return (
     <section className="relative bg-black pt-48 pb-0 z-20 overflow-visible">
        <div className="container mx-auto px-4 relative">
-          
-          {/* Flex container for Logo and Card - Center/Left alignment */}
           <div className="flex flex-col lg:flex-row items-center justify-center lg:justify-start gap-8 lg:gap-0 max-w-7xl mx-auto relative z-10 pb-12 lg:pb-24">
-             
-             {/* Logo - positioned left of card */}
-             <img 
-                src={ASSETS.logoYellow} 
-                alt="BF" 
-                className="w-32 lg:w-48 h-auto object-contain shrink-0 relative z-20 lg:mr-12" 
-             />
-
-             {/* Yellow Card with extra padding right for the person overlay */}
+             <img src={ASSETS.logoYellow} alt="BF" className="w-32 lg:w-48 h-auto object-contain shrink-0 relative z-20 lg:mr-12" />
              <div className="bg-brand-yellow rounded-3xl p-8 md:p-12 lg:pr-64 shadow-[0_0_30px_rgba(255,193,7,0.2)] relative z-10 w-full lg:w-auto lg:min-w-[650px]">
                   <h2 className="text-2xl md:text-3xl lg:text-5xl font-heading font-bold text-black leading-tight max-w-2xl">
                        “Nós não queremos clientes, <span className="font-black">queremos</span> <br/>parceiros!”
                   </h2>
              </div>
           </div>
-
-          {/* Person Image - Absolute positioned to overlap card and top section */}
           <div className="relative lg:absolute lg:bottom-0 lg:right-0 xl:right-20 w-[300px] md:w-[450px] lg:w-[500px] z-30 pointer-events-none flex justify-center mx-auto lg:mx-0 mt-[-40px] lg:mt-0">
-             {/* Removed negative translate so feet align with bottom border */}
-             <img 
-               src={ASSETS.partnerPerson} 
-               alt="Parceiro" 
-               className="w-full h-auto object-contain drop-shadow-2xl transform lg:translate-y-0 origin-bottom" 
-             /> 
+             <img src={ASSETS.partnerPerson} alt="Parceiro" className="w-full h-auto object-contain drop-shadow-2xl transform lg:translate-y-0 origin-bottom" /> 
           </div>
        </div>
     </section>
@@ -694,8 +626,6 @@ const Testimonials = () => (
     <div className="container mx-auto px-4 mb-12 text-center">
       <h2 className="text-3xl font-heading font-bold text-white">O que dizem nossos <span className="text-brand-yellow">Parceiros</span></h2>
     </div>
-    
-    {/* Infinite Scroll Marquee */}
     <div className="relative w-full flex overflow-hidden group">
       <div className="flex animate-scroll group-hover:[animation-play-state:paused] gap-6 px-6">
         {[...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS].map((t, i) => (
@@ -716,7 +646,6 @@ const Testimonials = () => (
           </div>
         ))}
       </div>
-      {/* Gradient overlays */}
       <div className="absolute top-0 left-0 h-full w-24 bg-gradient-to-r from-brand-dark to-transparent z-10"></div>
       <div className="absolute top-0 right-0 h-full w-24 bg-gradient-to-l from-brand-dark to-transparent z-10"></div>
     </div>
@@ -735,18 +664,8 @@ const CtaSection = ({ onOpenModal }: { onOpenModal: () => void }) => (
           Temos apenas 3 vagas disponíveis para novos projetos este mês. Garanta sua análise gratuita agora.
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-4">
-          <a 
-            href="https://wa.me/5573983069902?text=Quero transformar meu negócio com a BF Agência!" 
-            className="bg-black text-white font-bold text-lg px-10 py-4 rounded-lg hover:scale-105 transition-transform shadow-xl"
-          >
-            Falar no WhatsApp
-          </a>
-          <button 
-            onClick={onOpenModal}
-            className="bg-transparent border-2 border-black text-black font-bold text-lg px-10 py-4 rounded-lg hover:bg-black hover:text-white transition-all"
-          >
-            Receber Proposta
-          </button>
+          <a href="https://wa.me/5573983069902?text=Quero transformar meu negócio com a BF Agência!" className="bg-black text-white font-bold text-lg px-10 py-4 rounded-lg hover:scale-105 transition-transform shadow-xl">Falar no WhatsApp</a>
+          <button onClick={onOpenModal} className="bg-transparent border-2 border-black text-black font-bold text-lg px-10 py-4 rounded-lg hover:bg-black hover:text-white transition-all">Receber Proposta</button>
         </div>
       </Reveal>
     </div>
@@ -763,41 +682,23 @@ const Footer = () => (
             Agência de gestão de tráfego pago focada em resultados reais. Transformamos cliques em clientes e dados em lucro.
           </p>
         </div>
-        
         <div>
           <h4 className="text-white font-bold mb-6 uppercase tracking-wider">Contato</h4>
           <ul className="space-y-4">
-            <li className="flex items-center gap-3 text-gray-400 hover:text-brand-yellow transition-colors">
-              <Phone size={18} className="text-brand-yellow" />
-              <span>+55 73 9830-6902</span>
-            </li>
-            <li className="flex items-center gap-3 text-gray-400 hover:text-brand-yellow transition-colors">
-              <Mail size={18} className="text-brand-yellow" />
-              <span>onzycompany@gmail.com</span>
-            </li>
-            <li className="flex items-center gap-3 text-gray-400">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span>Disponível agora para novos projetos</span>
-            </li>
+            <li className="flex items-center gap-3 text-gray-400 hover:text-brand-yellow transition-colors"><Phone size={18} className="text-brand-yellow" /><span>+55 73 9830-6902</span></li>
+            <li className="flex items-center gap-3 text-gray-400 hover:text-brand-yellow transition-colors"><Mail size={18} className="text-brand-yellow" /><span>onzycompany@gmail.com</span></li>
+            <li className="flex items-center gap-3 text-gray-400"><div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div><span>Disponível agora para novos projetos</span></li>
           </ul>
         </div>
-
         <div>
           <h4 className="text-white font-bold mb-6 uppercase tracking-wider">Social</h4>
           <div className="flex gap-4">
-            <a href="#" className="w-10 h-10 rounded-full bg-zinc-900 flex items-center justify-center text-gray-400 hover:bg-brand-yellow hover:text-black transition-all">
-              <Instagram size={20} />
-            </a>
-            <a href="#" className="w-10 h-10 rounded-full bg-zinc-900 flex items-center justify-center text-gray-400 hover:bg-brand-yellow hover:text-black transition-all">
-              <Facebook size={20} />
-            </a>
-            <a href="#" className="w-10 h-10 rounded-full bg-zinc-900 flex items-center justify-center text-gray-400 hover:bg-brand-yellow hover:text-black transition-all">
-              <Linkedin size={20} />
-            </a>
+            <a href="#" className="w-10 h-10 rounded-full bg-zinc-900 flex items-center justify-center text-gray-400 hover:bg-brand-yellow hover:text-black transition-all"><Instagram size={20} /></a>
+            <a href="#" className="w-10 h-10 rounded-full bg-zinc-900 flex items-center justify-center text-gray-400 hover:bg-brand-yellow hover:text-black transition-all"><Facebook size={20} /></a>
+            <a href="#" className="w-10 h-10 rounded-full bg-zinc-900 flex items-center justify-center text-gray-400 hover:bg-brand-yellow hover:text-black transition-all"><Linkedin size={20} /></a>
           </div>
         </div>
       </div>
-
       <div className="border-t border-zinc-900 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-600">
         <p>&copy; {new Date().getFullYear()} BF Agência. Todos os direitos reservados.</p>
         <p>Desenvolvido com Tecnologia React & Gemini AI</p>
@@ -807,15 +708,8 @@ const Footer = () => (
 );
 
 const FloatingWhatsApp = () => (
-  <a 
-    href="https://wa.me/5573983069002?text=Olá! Vim pelo site da BF Agência."
-    target="_blank"
-    rel="noopener noreferrer"
-    className="fixed bottom-5 right-5 sm:bottom-8 sm:right-8 z-50 bg-[#25D366] text-white p-4 rounded-full shadow-[0_0_20px_rgba(37,211,102,0.4)] hover:scale-110 hover:shadow-[0_0_30px_rgba(37,211,102,0.6)] transition-all duration-300 animate-pulse-slow flex items-center justify-center"
-  >
-    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
-      <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
-    </svg>
+  <a href="https://wa.me/5573983069002?text=Olá! Vim pelo site da BF Agência." target="_blank" rel="noopener noreferrer" className="fixed bottom-5 right-5 sm:bottom-8 sm:right-8 z-50 bg-[#25D366] text-white p-4 rounded-full shadow-[0_0_20px_rgba(37,211,102,0.4)] hover:scale-110 hover:shadow-[0_0_30px_rgba(37,211,102,0.6)] transition-all duration-300 animate-pulse-slow flex items-center justify-center">
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/></svg>
   </a>
 );
 
@@ -830,6 +724,7 @@ const App: React.FC = () => {
       <About />
       <Services />
       <TeamSection />
+      <ExtendedTeamSection />
       <SolutionsSection />
       <WhyUs />
       <PartnershipSection />
