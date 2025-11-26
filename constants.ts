@@ -64,15 +64,15 @@ export const ADAPTATION_ITEMS = [
 
 export const EXTENDED_TEAM = [
   { 
-    name: "Especialista", 
-    role: "Suporte", 
+    name: "Anne", 
+    role: "Setor Administrativo", 
     instagram: "https://www.instagram.com/bf.agencia/", 
     image: "https://res.cloudinary.com/dxhlvrach/image/upload/v1764126140/Design_sem_nome_33_kyymvg.png",
     active: true
   },
   { 
-    name: "Especialista", 
-    role: "Suporte", 
+    name: "Gleice", 
+    role: "Suporte ao cliente", 
     instagram: "https://www.instagram.com/bf.agencia/", 
     image: "https://res.cloudinary.com/dxhlvrach/image/upload/v1764126141/Design_sem_nome_34_t9da6z.png",
     active: true 
