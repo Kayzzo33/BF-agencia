@@ -2,15 +2,16 @@ import { GoogleGenAI } from "@google/genai";
 
 export const generateAIResponse = async (userMessage: string): Promise<string> => {
   try {
-    // Initialize the client lazily to prevent "Black Screen" crash on app load
-    // if the environment variable isn't immediately available in the browser context.
-    const apiKey = process.env.API_KEY;
+    // Garante que o processo existe antes de tentar acessar a chave
+    // Isso previne o erro "process is not defined" ou "API Key must be set" ao carregar a página
+    const apiKey = typeof process !== 'undefined' ? process.env.API_KEY : undefined;
     
     if (!apiKey) {
       console.error("API_KEY is missing.");
-      return "O sistema de chat está temporariamente indisponível (Chave de API não configurada).";
+      return "⚠️ O chat está indisponível no momento porque a Chave de API não foi configurada no sistema.";
     }
 
+    // A inicialização agora acontece APENAS quando o usuário envia uma mensagem
     const ai = new GoogleGenAI({ apiKey: apiKey });
 
     const systemInstruction = `

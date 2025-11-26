@@ -63,8 +63,32 @@ export const ADAPTATION_ITEMS = [
 ];
 
 export const EXTENDED_TEAM = [
-  { name: "Ytallo", role: "Gestor de Tráfego", instagram: "@ytallo", image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1000&auto=format&fit=crop" },
-  { name: "Evy", role: "Gestor de Tráfego", instagram: "@evy", image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1000&auto=format&fit=crop" },
-  { name: "Ane", role: "Suporte", instagram: "@ane", image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1000&auto=format&fit=crop" },
-  { name: "Gleice", role: "Suporte", instagram: "@gleice", image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1000&auto=format&fit=crop" },
+  { 
+    name: "Especialista", 
+    role: "Suporte", 
+    instagram: "https://www.instagram.com/bf.agencia/", 
+    image: "https://res.cloudinary.com/dxhlvrach/image/upload/v1764126140/Design_sem_nome_33_kyymvg.png",
+    active: true
+  },
+  { 
+    name: "Especialista", 
+    role: "Suporte", 
+    instagram: "https://www.instagram.com/bf.agencia/", 
+    image: "https://res.cloudinary.com/dxhlvrach/image/upload/v1764126141/Design_sem_nome_34_t9da6z.png",
+    active: true 
+  },
+  { 
+    name: "Em breve", 
+    role: "Vaga Aberta", 
+    instagram: "", 
+    image: "",
+    active: false
+  },
+  { 
+    name: "Em breve", 
+    role: "Vaga Aberta", 
+    instagram: "", 
+    image: "",
+    active: false
+  },
 ];
